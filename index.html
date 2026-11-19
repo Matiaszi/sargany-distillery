@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sargany Distillery</title>
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="description" content="Kraftowe bimbrownictwo. Karta trunków dla swoich.">
+  <meta name="theme-color" content="#1E2747">
+  <meta property="og:title" content="Sargany Distillery">
+  <meta property="og:description" content="Kraftowe bimbrownictwo. Karta trunków dla swoich — 11 gatunków, od czystego po słony karmel.">
+  <meta property="og:image" content="og.png">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@700;900&family=Caveat:wght@500;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#cennik">Przejdź do cennika</a>
+
+  <header class="hero">
+    <div class="hero__top">
+      <img class="hero__logo" src="logo.svg" alt="Sargany Distillery" width="200" height="200">
+      <div class="hero__tekst">
+        <h1 class="hero__tytul"><span>Sargany</span> <span>Distillery</span></h1>
+        <p class="hero__lead">Kraftowe bimbrownictwo. Pędzone w małych partiach, w piwnicy, dla swoich. Jedenaście gatunków — od czystego po słony karmel.</p>
+        <div class="hero__cta">
+          <a class="btn btn--jasny" href="#cennik">Zobacz cennik</a>
+          <a class="btn btn--obrys" href="#zamow">Jak zamówić</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="polka" aria-label="Półka z trunkami">
+      <p class="polka__hint">Kliknij butelkę, żeby ją zdjąć z półki</p>
+      <div class="polka__scroll">
+        <ul class="polka__lista" id="polka"></ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="cennik" id="cennik" aria-labelledby="cennik-h">
+      <div class="kartka">
+        <div class="kartka__glowa">
+          <h2 id="cennik-h">Karta trunków</h2>
+          <p>Ceny za butelkę. Butelki zwrotne mile widziane — szkło wraca do obiegu.</p>
+          <span class="pieczatka" aria-hidden="true">Sargany<br>Partia 2026</span>
+        </div>
+        <div id="grupy"></div>
+      </div>
+    </section>
+
+    <section class="zamow" id="zamow" aria-labelledby="zamow-h">
+      <h2 id="zamow-h">Jak zamówić</h2>
+      <ol class="kroki">
+        <li><strong>Dobierz butelki.</strong> Przyciskiem przy cenie dodajesz 0,5 L albo 1 L do zamówienia.</li>
+        <li><strong>Wyślij listę.</strong> Otwórz zamówienie, wpisz imię i skopiuj gotową wiadomość — albo wyślij ją SMS-em jednym kliknięciem.</li>
+        <li><strong>Odbierz osobiście.</strong> Umawiamy się na odbiór, płacisz przy odbiorze. Bez wysyłek.</li>
+      </ol>
+      <button class="btn btn--ciemny" type="button" data-otworz-koszyk>Otwórz zamówienie</button>
+    </section>
+  </main>
+
+  <footer class="stopka">
+    <img src="logo.svg" alt="" width="72" height="72">
+    <p>Sargany Distillery · strona tylko dla znajomych, nie udostępniaj jej dalej.</p>
+    <p>Tylko dla osób pełnoletnich. Pij z głową — i nigdy przed jazdą.</p>
+  </footer>
+
+  <!-- koszyk pływający -->
+  <button class="fab" type="button" id="fab" hidden data-otworz-koszyk>
+    <span class="fab__ile" id="fab-ile">0</span>
+    <span>Zamówienie</span>
+    <span class="fab__suma" id="fab-suma">0 zł</span>
+  </button>
+
+  <!-- szczegóły trunku -->
+  <dialog class="okno okno--trunek" id="okno-trunek" aria-labelledby="t-nazwa">
+    <button class="okno__zamknij" type="button" data-zamknij aria-label="Zamknij">×</button>
+    <div class="trunek">
+      <div class="trunek__butelka" id="t-butelka"></div>
+      <div class="trunek__info">
+        <p class="trunek__podpis" id="t-podpis"></p>
+        <h3 class="trunek__nazwa" id="t-nazwa"></h3>
+        <p class="trunek__opis" id="t-opis"></p>
+        <dl class="trunek__fakty">
+          <div><dt>Moc</dt><dd id="t-moc"></dd></div>
+          <div><dt>Baza</dt><dd id="t-baza"></dd></div>
+        </dl>
+        <p class="trunek__uwaga" id="t-uwaga" hidden></p>
+        <div class="trunek__ceny" id="t-ceny"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- zamówienie -->
+  <dialog class="okno okno--koszyk" id="okno-koszyk" aria-labelledby="k-h">
+    <button class="okno__zamknij" type="button" data-zamknij aria-label="Zamknij">×</button>
+    <h3 id="k-h">Twoje zamówienie</h3>
+    <div id="k-lista"></div>
+    <label class="pole">Imię / ksywa
+      <input type="text" id="k-imie" autocomplete="given-name" placeholder="np. Arek">
+    </label>
+    <label class="pole">Uwagi (opcjonalnie)
+      <input type="text" id="k-uwagi" placeholder="np. bimber 50%, odbiór w piątek">
+    </label>
+    <div class="koszyk__akcje">
+      <button class="btn btn--ciemny" type="button" id="k-kopiuj">Kopiuj zamówienie</button>
+      <a class="btn btn--obrys-ciemny" id="k-sms" hidden>Wyślij SMS</a>
+      <button class="btn btn--tekst" type="button" id="k-wyczysc">Wyczyść</button>
+    </div>
+    <p class="koszyk__status" id="k-status" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <!-- 18+ -->
+  <dialog class="okno okno--wiek" id="okno-wiek" aria-labelledby="w-h">
+    <img src="logo.svg" alt="" width="120" height="120">
+    <h3 id="w-h">Masz skończone 18 lat?</h3>
+    <p>Ta strona to karta trunków alkoholowych. Wchodzą tylko pełnoletni.</p>
+    <div class="wiek__akcje">
+      <button class="btn btn--ciemny" type="button" id="w-tak">Tak, nalewaj</button>
+      <a class="btn btn--tekst" href="https://www.google.com">Nie, wychodzę</a>
+    </div>
+  </dialog>
+
+  <script src="dane.js"></script>
+  <script src="butelki.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

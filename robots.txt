@@ -1,0 +1,9 @@
+# Strona prywatna. Google i Bing mogą wejść tylko po to, żeby zobaczyć noindex.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: *
+Disallow: /
