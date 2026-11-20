@@ -3,134 +3,180 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sargany Distillery</title>
+  <title>Sargany — destylarnia rzemieślnicza</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow">
-  <meta name="description" content="Kraftowe bimbrownictwo. Karta trunków dla swoich.">
-  <meta name="theme-color" content="#1E2747">
-  <meta property="og:title" content="Sargany Distillery">
-  <meta property="og:description" content="Kraftowe bimbrownictwo. Karta trunków dla swoich — 11 gatunków, od czystego po słony karmel.">
-  <meta property="og:image" content="https://matiaszi.github.io/sargany-distillery/og.png">
+  <meta name="description" content="Jedenaście trunków z jednej piwnicy. Kolekcja dla swoich.">
+  <meta name="theme-color" content="#1C1814">
+  <meta property="og:title" content="Sargany — destylarnia rzemieślnicza">
+  <meta property="og:description" content="Jedenaście trunków z jednej piwnicy. Od czystego bimbru po słony karmel.">
+  <meta property="og:image" content="https://matiaszi.github.io/sargany-distillery/img/og.jpg">
   <meta property="og:url" content="https://matiaszi.github.io/sargany-distillery/">
   <meta property="og:type" content="website">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@700;900&family=Caveat:wght@500;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="img/hero.webp" media="(min-width: 761px)">
+  <link rel="preload" as="image" href="img/hero-m.webp" media="(max-width: 760px)">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="skip" href="#cennik">Przejdź do cennika</a>
+  <a class="skip" href="#kolekcja">Przejdź do kolekcji</a>
 
-  <header class="hero">
-    <div class="hero__top">
-      <img class="hero__logo" src="logo.svg" alt="Sargany Distillery" width="200" height="200">
-      <div class="hero__tekst">
-        <h1 class="hero__tytul"><span>Sargany</span> <span>Distillery</span></h1>
-        <p class="hero__lead">Kraftowe bimbrownictwo. Pędzone w małych partiach, w piwnicy, dla swoich. Jedenaście gatunków — od czystego po słony karmel.</p>
-        <div class="hero__cta">
-          <a class="btn btn--jasny" href="#cennik">Zobacz cennik</a>
-          <a class="btn btn--obrys" href="#zamow">Jak zamówić</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="polka" aria-label="Półka z trunkami">
-      <p class="polka__hint">Kliknij butelkę, żeby ją zdjąć z półki</p>
-      <div class="polka__scroll">
-        <ul class="polka__lista" id="polka"></ul>
-      </div>
-    </div>
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top" aria-label="Sargany — na górę strony">
+      <img class="nav__logo-jasne" src="img/logo-poziom-jasne.svg" alt="" width="250" height="68">
+      <img class="nav__logo-ciemne" src="img/logo-poziom-ciemne.svg" alt="" width="250" height="68">
+    </a>
+    <nav class="nav__linki" aria-label="Sekcje">
+      <a href="#kolekcja">Kolekcja</a>
+      <a href="#proces">Jak powstaje</a>
+      <a href="#cennik">Cennik</a>
+    </nav>
+    <button class="nav__koszyk" type="button" data-koszyk aria-label="Otwórz zamówienie">
+      Zamówienie <span class="nav__ile" id="nav-ile">0</span>
+    </button>
   </header>
 
-  <main>
-    <section class="cennik" id="cennik" aria-labelledby="cennik-h">
-      <div class="kartka">
-        <div class="kartka__glowa">
-          <h2 id="cennik-h">Karta trunków</h2>
-          <p>Ceny za butelkę. Butelki zwrotne mile widziane — szkło wraca do obiegu.</p>
-          <span class="pieczatka" aria-hidden="true">Sargany<br>Partia 2026</span>
-        </div>
-        <div id="grupy"></div>
+  <section class="hero" id="top" aria-label="Sargany">
+    <picture class="hero__foto">
+      <source media="(max-width: 760px)" srcset="img/hero-m.webp">
+      <img src="img/hero.webp" alt="Miedziany alembik w ceglanej piwnicy, na stole butelka i szklanka" width="2400" height="1340">
+    </picture>
+    <div class="hero__tresc">
+      <p class="hero__nad">Destylarnia rzemieślnicza z piwnicy</p>
+      <h1 class="hero__tytul">Sargany</h1>
+      <div class="hero__dol">
+        <p class="hero__lead">Jedenaście trunków pędzonych w małych partiach, w miedzi, ręcznie. Bez sklepu i bez reklam — tylko dla swoich.</p>
+        <a class="przycisk przycisk--jasny" href="#kolekcja">Zobacz kolekcję</a>
       </div>
+    </div>
+  </section>
+
+  <main>
+    <section class="manifest" aria-label="O kolekcji">
+      <p class="manifest__tekst" id="manifest"></p>
+    </section>
+
+    <section class="kolekcja" id="kolekcja" aria-labelledby="kolekcja-h">
+      <div class="kolekcja__glowa">
+        <h2 id="kolekcja-h">Kolekcja</h2>
+        <div class="filtry" aria-label="Filtruj kolekcję" id="filtry"></div>
+      </div>
+      <ul class="siatka" id="siatka"></ul>
+    </section>
+
+    <section class="proces" id="proces" aria-labelledby="proces-h">
+      <div class="proces__glowa">
+        <h2 id="proces-h">Jak powstaje</h2>
+        <p>Od zacieru do lakowanego korka. Każda partia przechodzi przez te same ręce i tę samą miedź.</p>
+      </div>
+      <ol class="kroki">
+        <li>
+          <img src="img/proces-1.webp" alt="Gąsiory z fermentującym nastawem, skrzynka śliwek i worek żyta" width="900" height="1200" loading="lazy">
+          <h3>Nastaw</h3>
+          <p>Zacier pracuje tygodniami w szklanych gąsiorach, w chłodzie piwnicy.</p>
+        </li>
+        <li>
+          <img src="img/proces-2.webp" alt="Miedziany alembik, z chłodnicy kapie czysty destylat" width="900" height="1200" loading="lazy">
+          <h3>Destylacja</h3>
+          <p>Powoli, w miedzi. Przedgon i pogon idą precz, zostaje samo serce.</p>
+        </li>
+        <li>
+          <img src="img/proces-3.webp" alt="Płatki dębowe, trawa żubrowa, pigwa, wiśnie i kawa obok słoików z nalewami" width="900" height="1200" loading="lazy">
+          <h3>Maceracja</h3>
+          <p>Dąb, trawa żubrowa, owoce, kawa. Każdy smak dostaje tyle czasu, ile potrzebuje.</p>
+        </li>
+        <li>
+          <img src="img/proces-4.webp" alt="Dłonie zanurzają szyjkę butelki w czarnym laku" width="900" height="1200" loading="lazy">
+          <h3>Butelkowanie</h3>
+          <p>Ręcznie: etykieta, korek i lak. Każda butelka z jednej, krótkiej serii.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="cennik" id="cennik" aria-labelledby="cennik-h">
+      <div class="cennik__glowa">
+        <h2 id="cennik-h">Cennik</h2>
+        <p>Ceny za butelkę. Puste butelki chętnie przyjmę z powrotem.</p>
+      </div>
+      <table class="tabela">
+        <thead><tr><th scope="col">Trunek</th><th scope="col">Moc</th><th scope="col">0,5 L</th><th scope="col">1 L</th></tr></thead>
+        <tbody id="tabela"></tbody>
+      </table>
     </section>
 
     <section class="zamow" id="zamow" aria-labelledby="zamow-h">
       <h2 id="zamow-h">Jak zamówić</h2>
-      <ol class="kroki">
-        <li><strong>Dobierz butelki.</strong> Przyciskiem przy cenie dodajesz 0,5 L albo 1 L do zamówienia.</li>
-        <li><strong>Wyślij listę.</strong> Otwórz zamówienie, wpisz imię i skopiuj gotową wiadomość — albo wyślij ją SMS-em jednym kliknięciem.</li>
-        <li><strong>Odbierz osobiście.</strong> Umawiamy się na odbiór, płacisz przy odbiorze. Bez wysyłek.</li>
+      <ol class="zamow__kroki">
+        <li>Dodaj butelki do zamówienia — przy każdym trunku wybierasz 0,5 L albo 1 L.</li>
+        <li>Otwórz zamówienie, wpisz imię i skopiuj gotową listę.</li>
+        <li>Wyślij ją na Messengerze albo WhatsAppie. Odbiór osobisty, płatność przy odbiorze.</li>
       </ol>
-      <button class="btn btn--ciemny" type="button" data-otworz-koszyk>Otwórz zamówienie</button>
+      <button class="przycisk przycisk--ciemny" type="button" data-koszyk>Otwórz zamówienie</button>
     </section>
   </main>
 
   <footer class="stopka">
-    <img src="logo.svg" alt="" width="72" height="72">
-    <p>Sargany Distillery · strona tylko dla znajomych, nie udostępniaj jej dalej.</p>
-    <p>Tylko dla osób pełnoletnich. Pij z głową — i nigdy przed jazdą.</p>
+    <img class="stopka__logo" src="img/logo-pion-jasne.svg" alt="Sargany — destylarnia rzemieślnicza" width="520" height="330" loading="lazy">
+    <p>Strona prywatna, tylko dla znajomych. Nie udostępniaj jej dalej.</p>
+    <p>Wyłącznie dla osób pełnoletnich. Pij z głową i nigdy przed jazdą.</p>
   </footer>
 
-  <!-- koszyk pływający -->
-  <button class="fab" type="button" id="fab" hidden data-otworz-koszyk>
-    <span class="fab__ile" id="fab-ile">0</span>
-    <span>Zamówienie</span>
-    <span class="fab__suma" id="fab-suma">0 zł</span>
-  </button>
-
-  <!-- szczegóły trunku -->
-  <dialog class="okno okno--trunek" id="okno-trunek" aria-labelledby="t-nazwa">
-    <button class="okno__zamknij" type="button" data-zamknij aria-label="Zamknij">×</button>
-    <div class="trunek">
-      <div class="trunek__butelka" id="t-butelka"></div>
-      <div class="trunek__info">
-        <p class="trunek__podpis" id="t-podpis"></p>
-        <h3 class="trunek__nazwa" id="t-nazwa"></h3>
-        <p class="trunek__opis" id="t-opis"></p>
-        <dl class="trunek__fakty">
-          <div><dt>Moc</dt><dd id="t-moc"></dd></div>
-          <div><dt>Baza</dt><dd id="t-baza"></dd></div>
-        </dl>
-        <p class="trunek__uwaga" id="t-uwaga" hidden></p>
-        <div class="trunek__ceny" id="t-ceny"></div>
-      </div>
+  <dialog class="okno-trunek" id="okno-trunek" aria-labelledby="t-nazwa">
+    <div class="okno-trunek__foto" id="t-foto"></div>
+    <div class="okno-trunek__info">
+      <button class="zamknij" type="button" data-zamknij aria-label="Zamknij">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <p class="okno-trunek__grupa" id="t-grupa"></p>
+      <h3 id="t-nazwa"></h3>
+      <p class="okno-trunek__nuta" id="t-nuta"></p>
+      <p class="okno-trunek__opis" id="t-opis"></p>
+      <dl class="fakty">
+        <div><dt>Moc</dt><dd id="t-moc"></dd></div>
+        <div><dt>Baza</dt><dd id="t-baza"></dd></div>
+        <div><dt>Podawanie</dt><dd id="t-podawanie"></dd></div>
+      </dl>
+      <ul class="uwagi" id="t-uwagi"></ul>
+      <div class="warianty" id="t-ceny"></div>
     </div>
   </dialog>
 
-  <!-- zamówienie -->
-  <dialog class="okno okno--koszyk" id="okno-koszyk" aria-labelledby="k-h">
-    <button class="okno__zamknij" type="button" data-zamknij aria-label="Zamknij">×</button>
-    <h3 id="k-h">Twoje zamówienie</h3>
-    <div id="k-lista"></div>
-    <label class="pole">Imię / ksywa
-      <input type="text" id="k-imie" autocomplete="given-name" placeholder="np. Arek">
-    </label>
-    <label class="pole">Uwagi (opcjonalnie)
-      <input type="text" id="k-uwagi" placeholder="np. bimber 50%, odbiór w piątek">
-    </label>
-    <div class="koszyk__akcje">
-      <button class="btn btn--ciemny" type="button" id="k-kopiuj">Kopiuj zamówienie</button>
-      <a class="btn btn--obrys-ciemny" id="k-sms" hidden>Wyślij SMS</a>
-      <button class="btn btn--tekst" type="button" id="k-wyczysc">Wyczyść</button>
+  <dialog class="szuflada" id="szuflada" aria-labelledby="k-h">
+    <div class="szuflada__glowa">
+      <h3 id="k-h">Zamówienie</h3>
+      <button class="zamknij" type="button" data-zamknij aria-label="Zamknij">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
     </div>
-    <p class="koszyk__status" id="k-status" role="status" aria-live="polite"></p>
+    <div class="szuflada__lista" id="k-lista"></div>
+    <div class="szuflada__dol">
+      <label class="pole">Imię lub ksywa
+        <input type="text" id="k-imie" autocomplete="given-name" placeholder="np. Arek">
+      </label>
+      <label class="pole">Uwagi
+        <input type="text" id="k-uwagi" placeholder="np. bimber mocniejszy, odbiór w piątek">
+      </label>
+      <div class="suma"><span>Razem</span><strong id="k-suma">0 zł</strong></div>
+      <button class="przycisk przycisk--ciemny przycisk--pelny" type="button" id="k-kopiuj">Kopiuj zamówienie</button>
+      <p class="szuflada__status" id="k-status" role="status" aria-live="polite"></p>
+    </div>
   </dialog>
 
-  <!-- 18+ -->
-  <dialog class="okno okno--wiek" id="okno-wiek" aria-labelledby="w-h">
-    <img src="logo.svg" alt="" width="120" height="120">
-    <h3 id="w-h">Masz skończone 18 lat?</h3>
-    <p>Ta strona to karta trunków alkoholowych. Wchodzą tylko pełnoletni.</p>
+  <dialog class="wiek" id="wiek" aria-labelledby="w-h">
+    <img src="img/sygnet-jasne.svg" alt="" width="84" height="114">
+    <h3 id="w-h">Masz ukończone 18 lat?</h3>
+    <p>Ta strona to kolekcja trunków alkoholowych. Wchodzą wyłącznie osoby pełnoletnie.</p>
     <div class="wiek__akcje">
-      <button class="btn btn--ciemny" type="button" id="w-tak">Tak, nalewaj</button>
-      <a class="btn btn--tekst" href="https://www.google.com">Nie, wychodzę</a>
+      <button class="przycisk przycisk--jasny" type="button" id="w-tak">Tak, wchodzę</button>
+      <a class="wiek__nie" href="https://www.google.com">Nie mam 18 lat</a>
     </div>
   </dialog>
 
   <script src="dane.js"></script>
-  <script src="butelki.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

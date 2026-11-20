@@ -1,8 +1,10 @@
-# Sargany Distillery
+# Sargany — destylarnia rzemieślnicza
 
-Prywatna karta trunków dla znajomych. Statyczna strona, bez builda.
+Prywatna strona-kolekcja dla znajomych. Statyczna, bez builda.
+Online: https://matiaszi.github.io/sargany-distillery/ (GitHub Pages, `git push` = wdrożenie)
 
-- Ceny, opisy, kolory butelek: `dane.js`
-- Numer do SMS-ów z zamówieniem: `telefon` w `dane.js`
-- Wdrożenie: `git push` → GitHub Pages (https://matiaszi.github.io/sargany-distillery/)
-- Brak indeksowania: meta robots w index.html (+ `_headers` na wypadek przeniesienia na Cloudflare)
+- Ceny, opisy, kolory kart: `dane.js`
+- Zdjęcia: `img/` (webp), logo: `img/*.svg`
+- Źródła zdjęć, logo i generator Magnific: `C:\Claude\sargany-zasoby` (poza repo — tam jest klucz API)
+- `zasoby/` — obrazy referencyjne dla generatora (muszą być publiczne pod github.io)
+- Brak indeksowania: meta robots w index.html

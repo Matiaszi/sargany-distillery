@@ -1,94 +1,101 @@
 (function () {
   const D = window.SARGANY;
   const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const zl = n => n.toLocaleString("pl-PL") + " zł";
-  // logo inline, żeby napisy w nim łapały font strony (SVG w <img> nie widzi web fontów)
-  fetch("logo.svg").then(r => r.text()).then(svg => {
-    document.querySelectorAll('img[src="logo.svg"]').forEach(img => {
-      const w = document.createElement("span");
-      w.innerHTML = svg;
-      const el = w.firstElementChild;
-      el.setAttribute("class", img.className);
-      el.setAttribute("width", img.getAttribute("width"));
-      el.setAttribute("height", img.getAttribute("height"));
-      if (!img.alt) el.setAttribute("aria-hidden", "true");
-      img.replaceWith(el);
-    });
-  }).catch(() => {});
   const poId = Object.fromEntries(D.trunki.map(t => [t.id, t]));
+  const grupaNazwa = Object.fromEntries(D.grupy.map(g => [g.id, g.nazwa]));
+  const foto = id => `img/prod-${id}.webp`;
+  const od = t => Math.min(...Object.values(t.ceny));
 
   const schowek = {
-    get(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } },
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
-
-  // koszyk: { "kawa|0,5 L": 2 }
   let koszyk = schowek.get("sargany-koszyk", {});
 
-  /* ---------- półka ---------- */
-  const polka = $("#polka");
-  polka.innerHTML = D.trunki.map((t, i) => {
-    const od = Math.min(...Object.values(t.ceny));
-    return `<li>
-      <button class="polka__btn" type="button" data-trunek="${t.id}" style="--d:${(i * 0.09).toFixed(2)}s" aria-label="${t.nazwa}: szczegóły">
-        ${butelka(t, { prefix: "p" })}
-      </button>
-      <span class="deska" aria-hidden="true"></span>
-      <span class="metka">od ${od} zł</span>
-    </li>`;
-  }).join("");
-  requestAnimationFrame(() => polka.classList.add("nalewaj"));
+  /* ---------- manifest z pigułkami ---------- */
+  const pig = (id, tekst) => {
+    const t = poId[id];
+    return `<button class="pigulka" type="button" data-trunek="${id}" style="background:${t.tlo};color:${t.tekst}"><img src="${foto(id)}" alt="" loading="lazy">${tekst || t.nazwa}</button>`;
+  };
+  $("#manifest").innerHTML =
+    `Jedna piwnica, jedna miedź, jedenaście charakterów. Od czystego ${pig("bimber")} przez leżakowaną na dębie ${pig("whisky")}, ziołowego ${pig("jager")} i ognistą ${pig("sliwka")}, aż po deserowy ${pig("karmel")}. Pędzone ręcznie, w małych partiach, dla swoich.`;
 
-  /* ---------- cennik ---------- */
-  const cenaBtn = (t, poj) =>
-    `<button class="cena" type="button" data-dodaj="${t.id}|${poj}" aria-label="Dodaj ${t.nazwa} ${poj} za ${t.ceny[poj]} zł">
-      <span class="cena__kwota">${t.ceny[poj]} zł</span>
-      <span class="cena__poj">${poj}</span>
-      <span class="cena__licznik" data-licznik="${t.id}|${poj}" hidden>0</span>
+  /* ---------- wariant (przycisk dodania) ---------- */
+  const wariantBtn = (t, poj) =>
+    `<button class="wariant" type="button" data-dodaj="${t.id}|${poj}" aria-label="Dodaj ${t.nazwa} ${poj}, ${t.ceny[poj]} zł">
+      <span>${poj} <span class="wariant__cena">${t.ceny[poj]} zł</span></span>
+      <span class="wariant__plus" aria-hidden="true">+</span>
+      <span class="wariant__ile" data-ile="${t.id}|${poj}">0</span>
     </button>`;
 
-  $("#grupy").innerHTML = D.grupy.map(g => `
-    <section class="grupa" aria-labelledby="g-${g.id}">
-      <div class="grupa__glowa"><h3 id="g-${g.id}">${g.nazwa}</h3><p>${g.opis}</p></div>
-      ${D.trunki.filter(t => t.grupa === g.id).map(t => `
-        <article class="wiersz">
-          <button class="wiersz__mini" type="button" data-trunek="${t.id}" aria-label="${t.nazwa}: szczegóły" tabindex="-1">${butelka(t, { prefix: "m" })}</button>
-          <div class="wiersz__tekst">
-            <button class="wiersz__nazwa" type="button" data-trunek="${t.id}">${t.nazwa}</button>
-            <p class="wiersz__opis">${t.opis}</p>
-            ${t.uwagi ? `<div class="wiersz__uwagi">${t.uwagi.map(u => `<span class="stempel">${u}</span>`).join("")}</div>` : ""}
-          </div>
-          <div class="wiersz__moc">${t.moc}%<small>moc</small></div>
-          <div class="wiersz__ceny">${Object.keys(t.ceny).map(p => cenaBtn(t, p)).join("")}</div>
-        </article>`).join("")}
-    </section>`).join("");
+  /* ---------- filtry + siatka ---------- */
+  $("#filtry").innerHTML = [{ id: "", nazwa: "Wszystkie" }, ...D.grupy]
+    .map((g, i) => `<button type="button" data-filtr="${g.id}" aria-pressed="${i === 0}">${g.nazwa}</button>`).join("");
+
+  $("#siatka").innerHTML = D.trunki.map(t => `
+    <li class="karta" data-grupa="${t.grupa}">
+      <button class="karta__foto" type="button" data-trunek="${t.id}" style="--tlo:${t.tlo}" aria-label="${t.nazwa} — szczegóły">
+        <img src="${foto(t.id)}" alt="Butelka Sargany ${t.nazwa}" width="900" height="1125" loading="lazy">
+        <span class="karta__moc">${t.moc}%</span>
+      </button>
+      <div class="karta__tekst">
+        <button class="karta__nazwa" type="button" data-trunek="${t.id}">${t.nazwa}</button>
+        <span class="karta__od">od ${od(t)} zł</span>
+        <p class="karta__nuta">${t.nuta}</p>
+      </div>
+      <div class="karta__warianty">${Object.keys(t.ceny).map(p => wariantBtn(t, p)).join("")}</div>
+    </li>`).join("") + `
+    <li class="karta karta--cta" data-grupa="">
+      <img class="karta--cta__znak" src="img/sygnet-jasne.svg" alt="" width="56" height="76" loading="lazy">
+      <h3>Wybrane? Złóż zamówienie</h3>
+      <p>Wpisujesz imię, kopiujesz gotową listę i wysyłasz na Messengerze albo WhatsAppie. Odbiór osobisty, płatność przy odbiorze.</p>
+      <button class="przycisk przycisk--jasny" type="button" data-koszyk>Otwórz zamówienie</button>
+    </li>`;
+
+  $("#filtry").addEventListener("click", e => {
+    const b = e.target.closest("[data-filtr]"); if (!b) return;
+    $$("#filtry button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    $$(".karta").forEach(k => { k.hidden = !!b.dataset.filtr && k.dataset.grupa !== b.dataset.filtr; });
+  });
+
+  /* ---------- cennik ---------- */
+  $("#tabela").innerHTML = D.trunki.map(t => `
+    <tr>
+      <td><button class="tabela__nazwa" type="button" data-trunek="${t.id}">${t.nazwa}</button><span class="tabela__nuta">${t.nuta}${t.mocUwaga ? ". " + t.mocUwaga : ""}</span></td>
+      <td>${t.moc}%</td>
+      <td class="kwota">${t.ceny["0,5 L"]} zł</td>
+      <td class="kwota">${t.ceny["1 L"]} zł</td>
+    </tr>`).join("");
 
   /* ---------- okno trunku ---------- */
   const oknoT = $("#okno-trunek");
-  function pokazTrunek(id) {
+  function pokaz(id) {
     const t = poId[id];
-    $("#t-butelka").innerHTML = butelka(t, { prefix: "d" });
-    $("#t-butelka").classList.remove("nalewaj"); void $("#t-butelka").offsetWidth; $("#t-butelka").classList.add("nalewaj");
-    $("#t-podpis").textContent = t.podpis || "";
+    $("#t-foto").style.setProperty("--tlo", t.tlo);
+    $("#t-foto").innerHTML = `<img src="${foto(id)}" alt="Butelka Sargany ${t.nazwa}">`;
+    $("#t-grupa").textContent = grupaNazwa[t.grupa];
     $("#t-nazwa").textContent = t.nazwa;
+    $("#t-nuta").textContent = t.nuta;
     $("#t-opis").textContent = t.opis;
-    $("#t-moc").textContent = t.moc + "%";
+    $("#t-moc").textContent = t.moc + "%" + (t.mocUwaga ? " · " + t.mocUwaga : "");
     $("#t-baza").textContent = t.baza;
-    const u = $("#t-uwaga");
-    u.hidden = !t.uwagaDluga; u.textContent = t.uwagaDluga || "";
-    $("#t-ceny").innerHTML = Object.keys(t.ceny).map(p => cenaBtn(t, p)).join("");
+    $("#t-podawanie").textContent = t.podawanie;
+    $("#t-uwagi").innerHTML = (t.uwagi || []).map(u => `<li>${u}</li>`).join("");
+    $("#t-ceny").innerHTML = Object.keys(t.ceny).map(p => wariantBtn(t, p)).join("");
     odswiezLiczniki();
-    oknoT.showModal();
+    if (!oknoT.open) oknoT.showModal();
+    $(".okno-trunek__info").scrollTop = 0;
   }
 
   /* ---------- koszyk ---------- */
-  const oknoK = $("#okno-koszyk");
-  const pozycje = () => Object.entries(koszyk).filter(([, n]) => n > 0).map(([k, n]) => {
+  const szuflada = $("#szuflada");
+  const pozycje = () => Object.entries(koszyk).map(([k, n]) => {
     const [id, poj] = k.split("|"); const t = poId[id];
-    return t && t.ceny[poj] ? { k, t, poj, n, kwota: t.ceny[poj] * n } : null;
+    return t && t.ceny[poj] && n > 0 ? { k, t, poj, n, kwota: t.ceny[poj] * n } : null;
   }).filter(Boolean);
   const suma = () => pozycje().reduce((s, p) => s + p.kwota, 0);
-  const sztuk = () => pozycje().reduce((s, p) => s + p.n, 0);
 
   function zmien(k, o) {
     koszyk[k] = Math.max(0, (koszyk[k] || 0) + o);
@@ -98,19 +105,18 @@
   }
 
   function odswiezLiczniki() {
-    document.querySelectorAll("[data-licznik]").forEach(el => {
-      const n = koszyk[el.dataset.licznik] || 0;
-      el.hidden = !n; el.textContent = n;
+    $$("[data-ile]").forEach(el => {
+      const n = koszyk[el.dataset.ile] || 0;
+      el.textContent = n;
+      el.closest(".wariant").classList.toggle("ma", n > 0);
     });
   }
 
   function tekstZamowienia() {
-    const imie = $("#k-imie").value.trim();
-    const uwagi = $("#k-uwagi").value.trim();
-    const linie = pozycje().map(p => `• ${p.t.nazwa} ${p.poj} × ${p.n} = ${zl(p.kwota)}`);
+    const imie = $("#k-imie").value.trim(), uwagi = $("#k-uwagi").value.trim();
     return [
-      `Zamówienie Sargany Distillery${imie ? " — " + imie : ""}`,
-      ...linie,
+      `Zamówienie Sargany${imie ? " — " + imie : ""}`,
+      ...pozycje().map(p => `• ${p.t.nazwa} ${p.poj} × ${p.n} = ${zl(p.kwota)}`),
       `Razem: ${zl(suma())}`,
       uwagi ? `Uwagi: ${uwagi}` : ""
     ].filter(Boolean).join("\n");
@@ -118,89 +124,75 @@
 
   function odswiez() {
     const lista = pozycje();
-    const fab = $("#fab");
-    const ile = sztuk();
-    fab.hidden = ile === 0;
-    $("#fab-ile").textContent = ile;
-    $("#fab-suma").textContent = zl(suma());
-    odswiezLiczniki();
-
-    $("#k-lista").innerHTML = lista.length
-      ? lista.map(p => `<div class="poz">
-          <div class="poz__nazwa">${p.t.nazwa} <small>${p.poj} · ${p.t.ceny[p.poj]} zł</small></div>
-          <div class="poz__ilosc">
-            <button type="button" data-zmien="${p.k}|-1" aria-label="Odejmij ${p.t.nazwa} ${p.poj}">−</button>
-            <span>${p.n}</span>
-            <button type="button" data-zmien="${p.k}|1" aria-label="Dodaj ${p.t.nazwa} ${p.poj}">+</button>
-          </div>
-          <div class="poz__kwota">${zl(p.kwota)}</div>
-        </div>`).join("") + `<div class="suma"><span>Razem</span><span>${zl(suma())}</span></div>`
-      : `<p class="pusto">Na razie pusto. Dodaj coś z karty trunków.</p>`;
-
-    const sms = $("#k-sms");
-    if (D.telefon && lista.length) {
-      sms.hidden = false;
-      sms.href = `sms:${D.telefon}?&body=${encodeURIComponent(tekstZamowienia())}`;
-    } else sms.hidden = true;
+    const ile = lista.reduce((s, p) => s + p.n, 0);
+    $("#nav-ile").textContent = ile;
+    $("#k-suma").textContent = zl(suma());
     $("#k-kopiuj").disabled = !lista.length;
+    odswiezLiczniki();
+    $("#k-lista").innerHTML = lista.length ? lista.map(p => `
+      <div class="poz">
+        <div class="poz__foto" style="--tlo:${p.t.tlo}"><img src="${foto(p.t.id)}" alt=""></div>
+        <div><div class="poz__nazwa">${p.t.nazwa}</div><div class="poz__wariant">${p.poj} · ${p.t.ceny[p.poj]} zł</div></div>
+        <div class="poz__prawa">
+          <span class="poz__kwota">${zl(p.kwota)}</span>
+          <span class="licznik">
+            <button type="button" data-zmien="${p.k}" data-o="-1" aria-label="Odejmij ${p.t.nazwa} ${p.poj}">−</button>
+            <span>${p.n}</span>
+            <button type="button" data-zmien="${p.k}" data-o="1" aria-label="Dodaj ${p.t.nazwa} ${p.poj}">+</button>
+          </span>
+        </div>
+      </div>`).join("")
+      : `<div class="pusto"><strong>Na razie pusto</strong>Dodaj coś z kolekcji — przy każdym trunku wybierasz 0,5 L albo 1 L.</div>`;
   }
 
   $("#k-imie").value = schowek.get("sargany-imie", "");
-  ["#k-imie", "#k-uwagi"].forEach(s => $(s).addEventListener("input", () => {
-    schowek.set("sargany-imie", $("#k-imie").value);
-    odswiez();
-  }));
+  $("#k-imie").addEventListener("input", e => schowek.set("sargany-imie", e.target.value));
 
   $("#k-kopiuj").addEventListener("click", async () => {
-    const txt = tekstZamowienia();
-    const st = $("#k-status");
+    const txt = tekstZamowienia(), st = $("#k-status");
     try {
       await navigator.clipboard.writeText(txt);
-      st.textContent = "Skopiowane. Wklej w wiadomości na Messengerze, WhatsAppie albo SMS-ie.";
+      st.textContent = "Skopiowane. Wklej na Messengerze albo WhatsAppie.";
     } catch {
-      st.textContent = "Nie udało się skopiować automatycznie — zaznacz i skopiuj tekst poniżej.";
-      const pre = document.createElement("textarea");
-      pre.value = txt; pre.rows = 6; pre.style.cssText = "width:100%;margin-top:8px;font:inherit";
-      st.after(pre); pre.select();
+      st.textContent = "Skopiuj ręcznie:";
+      const ta = document.createElement("textarea");
+      ta.value = txt; ta.rows = 6; ta.style.cssText = "width:100%;font:inherit;padding:10px;border-radius:8px";
+      st.after(ta); ta.select();
     }
-  });
-  $("#k-wyczysc").addEventListener("click", () => {
-    koszyk = {}; schowek.set("sargany-koszyk", koszyk); $("#k-status").textContent = "Wyczyszczone."; odswiez();
   });
 
   /* ---------- kliknięcia ---------- */
   document.addEventListener("click", e => {
-    const tr = e.target.closest("[data-trunek]");
-    if (tr) { pokazTrunek(tr.dataset.trunek); return; }
-
     const d = e.target.closest("[data-dodaj]");
     if (d) {
       zmien(d.dataset.dodaj, 1);
-      [d, $("#fab")].forEach(el => { el.classList.remove("dodano", "bump"); void el.offsetWidth; el.classList.add(el.id === "fab" ? "bump" : "dodano"); });
+      d.classList.remove("dodano"); void d.offsetWidth; d.classList.add("dodano");
+      const ile = $("#nav-ile"); ile.classList.add("bump"); setTimeout(() => ile.classList.remove("bump"), 300);
       return;
     }
     const z = e.target.closest("[data-zmien]");
-    if (z) { const parts = z.dataset.zmien.split("|"); zmien(parts[0] + "|" + parts[1], +parts[2]); return; }
-
-    if (e.target.closest("[data-otworz-koszyk]")) {
+    if (z) { zmien(z.dataset.zmien, +z.dataset.o); return; }
+    const t = e.target.closest("[data-trunek]");
+    if (t) { pokaz(t.dataset.trunek); return; }
+    if (e.target.closest("[data-koszyk]")) {
       if (oknoT.open) oknoT.close();
-      $("#k-status").textContent = ""; odswiez(); oknoK.showModal(); return;
+      $("#k-status").textContent = ""; odswiez(); szuflada.showModal(); return;
     }
     if (e.target.closest("[data-zamknij]")) { e.target.closest("dialog").close(); return; }
-    // klik w tło zamyka okno
-    if (e.target.tagName === "DIALOG" && e.target.id !== "okno-wiek") e.target.close();
+    if ((e.target === oknoT || e.target === szuflada)) e.target.close();
   });
 
+  /* ---------- nawigacja: jasna po zjechaniu z hero ---------- */
+  const nav = $("#nav"), hero = $(".hero");
+  new IntersectionObserver(([w]) => nav.classList.toggle("nav--jasna", !w.isIntersecting), { rootMargin: "-70px 0px 0px 0px" }).observe(hero);
+
   /* ---------- 18+ ---------- */
-  const oknoW = $("#okno-wiek");
+  const wiek = $("#wiek");
   if (!schowek.get("sargany-18", false)) {
-    oknoW.showModal();
-    oknoW.addEventListener("cancel", e => e.preventDefault());
+    wiek.showModal();
+    wiek.addEventListener("cancel", e => e.preventDefault());
   }
-  $("#w-tak").addEventListener("click", () => {
-    schowek.set("sargany-18", true); oknoW.close();
-    polka.classList.remove("nalewaj"); void polka.offsetWidth; polka.classList.add("nalewaj");
-  });
+  $("#w-tak").addEventListener("click", () => { schowek.set("sargany-18", true); wiek.close(); });
 
   odswiez();
 })();
