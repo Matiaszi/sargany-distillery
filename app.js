@@ -20,7 +20,7 @@
     return `<button class="pigulka" type="button" data-trunek="${id}" style="background:${t.tlo};color:${t.tekst}"><img src="${foto(id)}" alt="" loading="lazy">${tekst || t.nazwa}</button>`;
   };
   $("#manifest").innerHTML =
-    `Jedna piwnica, jedna miedź, jedenaście charakterów. Od czystego ${pig("bimber")} przez leżakowaną na dębie ${pig("whisky")}, ziołowego ${pig("jager")} i ognistą ${pig("sliwka")}, aż po deserowy ${pig("karmel")}. Pędzone ręcznie, w małych partiach, dla swoich.`;
+    `Jedna piwnica, jedna kolumna, jedenaście charakterów. Od czystego ${pig("bimber")} przez nastawianą na dębie ${pig("whisky")}, ziołowego ${pig("jager")} i ognistą ${pig("sliwka")}, aż po deserowy ${pig("karmel")}. Pędzone w małych partiach, butelkowane ręcznie, dla swoich.`;
 
   /* ---------- wariant (przycisk dodania) ---------- */
   const wariantBtn = (t, poj) =>
@@ -45,6 +45,10 @@
         <span class="karta__od">od ${od(t)} zł</span>
         <p class="karta__nuta">${t.nuta}</p>
       </div>
+      <button class="karta__wiecej" type="button" data-trunek="${t.id}">
+        <span class="karta__ikony">${t.sklad.filter(s => s.ik !== "woda").map(s => ikona(s.ik, 18)).join("")}${t.jak.slice(0, 2).map(j => ikona(j, 18)).join("")}</span>
+        Skład, przepis i podawanie
+      </button>
       <div class="karta__warianty">${Object.keys(t.ceny).map(p => wariantBtn(t, p)).join("")}</div>
     </li>`).join("") + `
     <li class="karta karta--cta" data-grupa="">
@@ -75,15 +79,25 @@
     const t = poId[id];
     $("#t-foto").style.setProperty("--tlo", t.tlo);
     $("#t-foto").innerHTML = `<img src="${foto(id)}" alt="Butelka Sargany ${t.nazwa}">`;
-    $("#t-grupa").textContent = grupaNazwa[t.grupa];
+    $("#t-grupa").textContent = `${grupaNazwa[t.grupa]} · ${t.moc}% vol.`;
     $("#t-nazwa").textContent = t.nazwa;
     $("#t-nuta").textContent = t.nuta;
     $("#t-opis").textContent = t.opis;
-    $("#t-moc").textContent = t.moc + "%" + (t.mocUwaga ? " · " + t.mocUwaga : "");
-    $("#t-baza").textContent = t.baza;
-    $("#t-podawanie").textContent = t.podawanie;
-    $("#t-uwagi").innerHTML = (t.uwagi || []).map(u => `<li>${u}</li>`).join("");
     $("#t-ceny").innerHTML = Object.keys(t.ceny).map(p => wariantBtn(t, p)).join("");
+    $("#t-uwagi").innerHTML = [...(t.uwagi || []), ...(t.mocUwaga ? [t.mocUwaga] : [])].map(u => `<li>${u}</li>`).join("");
+    const osie = [["slodycz", "Słodycz"], ["moc", "Moc w smaku"], ["owoc", "Owoc"], ["ziola", "Zioła i przyprawy"]];
+    $("#t-profil").innerHTML = osie.map(([k, n]) => {
+      const v = t.profil[k];
+      return `<div><dt>${n}</dt><dd aria-label="${v} na 5"><span class="skala">${[0, 1, 2, 3, 4].map(i => `<i${i < v ? ' class="pelna"' : ""}></i>`).join("")}</span></dd></div>`;
+    }).join("");
+    $("#t-sklad").innerHTML = t.sklad.map(s => `
+      <li><span class="sklad__ik">${ikona(s.ik, 26)}</span><span><strong>${s.nazwa}</strong><small>${s.opis}</small></span></li>`).join("");
+    $("#t-proces").innerHTML = t.proces.map(p => `<li>${p}</li>`).join("");
+    $("#t-temp").innerHTML = `${ikona("termometr", 20)}<span>${t.temp}</span>`;
+    $("#t-jak").innerHTML = t.jak.map(j => `<li>${ikona(j, 26)}<span>${IKONA_NAZWA[j]}</span></li>`).join("");
+    $("#t-przepis-nazwa").textContent = t.przepis.nazwa;
+    $("#t-przepis").textContent = t.przepis.tekst;
+    $("#t-pasuje").innerHTML = t.pasuje.map(p => `<li>${ikona("talerz", 16)}${p}</li>`).join("");
     odswiezLiczniki();
     if (!oknoT.open) oknoT.showModal();
     $(".okno-trunek__info").scrollTop = 0;

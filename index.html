@@ -43,13 +43,13 @@
   <section class="hero" id="top" aria-label="Sargany">
     <picture class="hero__foto">
       <source media="(max-width: 760px)" srcset="img/hero-m.webp">
-      <img src="img/hero.webp" alt="Miedziany alembik w ceglanej piwnicy, na stole butelka i szklanka" width="2400" height="1340">
+      <img src="img/hero.webp" alt="Kolumna destylacyjna w ceglanej piwnicy, na stole butelka Sargany i szklanka" width="2400" height="1340">
     </picture>
     <div class="hero__tresc">
       <p class="hero__nad">Destylarnia rzemieślnicza z piwnicy</p>
       <h1 class="hero__tytul">Sargany</h1>
       <div class="hero__dol">
-        <p class="hero__lead">Jedenaście trunków pędzonych w małych partiach, w miedzi, ręcznie. Bez sklepu i bez reklam — tylko dla swoich.</p>
+        <p class="hero__lead">Jedenaście trunków z jednej kolumny. Pędzone w małych partiach, butelkowane ręcznie. Bez sklepu i bez reklam — tylko dla swoich.</p>
         <a class="przycisk przycisk--jasny" href="#kolekcja">Zobacz kolekcję</a>
       </div>
     </div>
@@ -71,7 +71,7 @@
     <section class="proces" id="proces" aria-labelledby="proces-h">
       <div class="proces__glowa">
         <h2 id="proces-h">Jak powstaje</h2>
-        <p>Od zacieru do lakowanego korka. Każda partia przechodzi przez te same ręce i tę samą miedź.</p>
+        <p>Od zacieru do zakręconej butelki. Każda partia przechodzi przez tę samą kolumnę i te same ręce.</p>
       </div>
       <ol class="kroki">
         <li>
@@ -80,9 +80,9 @@
           <p>Zacier pracuje tygodniami w szklanych gąsiorach, w chłodzie piwnicy.</p>
         </li>
         <li>
-          <img src="img/proces-2.webp" alt="Miedziany alembik, z chłodnicy kapie czysty destylat" width="900" height="1200" loading="lazy">
+          <img src="img/proces-2.webp" alt="Kolumna destylacyjna ze sterownikiem, z odbioru kapie czysty destylat do słoja" width="900" height="1200" loading="lazy">
           <h3>Destylacja</h3>
-          <p>Powoli, w miedzi. Przedgon i pogon idą precz, zostaje samo serce.</p>
+          <p>Na kolumnie D-S V3 od DAB-SPAW z automatem Dest-Master. Bufor wypełniony miedzią wyłapuje siarkę, automat pilnuje temperatury. Przedgon i pogon odcięte — zostaje samo serce.</p>
         </li>
         <li>
           <img src="img/proces-3.webp" alt="Płatki dębowe, trawa żubrowa, pigwa, wiśnie i kawa obok słoików z nalewami" width="900" height="1200" loading="lazy">
@@ -90,9 +90,9 @@
           <p>Dąb, trawa żubrowa, owoce, kawa. Każdy smak dostaje tyle czasu, ile potrzebuje.</p>
         </li>
         <li>
-          <img src="img/proces-4.webp" alt="Dłonie zanurzają szyjkę butelki w czarnym laku" width="900" height="1200" loading="lazy">
+          <img src="img/proces-4.webp" alt="Dłonie zakręcają nakrętkę i przyklejają etykietę Sargany na butelce" width="900" height="1200" loading="lazy">
           <h3>Butelkowanie</h3>
-          <p>Ręcznie: etykieta, korek i lak. Każda butelka z jednej, krótkiej serii.</p>
+          <p>Ręcznie: rozlew do butelek, nakrętka i etykieta. Każda butelka z jednej, krótkiej serii.</p>
         </li>
       </ol>
     </section>
@@ -135,13 +135,35 @@
       <h3 id="t-nazwa"></h3>
       <p class="okno-trunek__nuta" id="t-nuta"></p>
       <p class="okno-trunek__opis" id="t-opis"></p>
-      <dl class="fakty">
-        <div><dt>Moc</dt><dd id="t-moc"></dd></div>
-        <div><dt>Baza</dt><dd id="t-baza"></dd></div>
-        <div><dt>Podawanie</dt><dd id="t-podawanie"></dd></div>
-      </dl>
-      <ul class="uwagi" id="t-uwagi"></ul>
       <div class="warianty" id="t-ceny"></div>
+      <ul class="uwagi" id="t-uwagi"></ul>
+
+      <section class="blok" aria-labelledby="b-profil">
+        <h4 id="b-profil">Profil smaku</h4>
+        <dl class="profil" id="t-profil"></dl>
+      </section>
+      <section class="blok" aria-labelledby="b-sklad">
+        <h4 id="b-sklad">Co jest w środku</h4>
+        <ul class="sklad" id="t-sklad"></ul>
+      </section>
+      <section class="blok" aria-labelledby="b-proces">
+        <h4 id="b-proces">Jak powstaje</h4>
+        <ol class="os" id="t-proces"></ol>
+      </section>
+      <section class="blok" aria-labelledby="b-jak">
+        <h4 id="b-jak">Jak pić</h4>
+        <p class="temp" id="t-temp"></p>
+        <ul class="jak" id="t-jak"></ul>
+      </section>
+      <section class="blok przepis" aria-labelledby="b-przepis">
+        <h4 id="b-przepis">Spróbuj</h4>
+        <p class="przepis__nazwa" id="t-przepis-nazwa"></p>
+        <p id="t-przepis"></p>
+      </section>
+      <section class="blok" aria-labelledby="b-pasuje">
+        <h4 id="b-pasuje">Pasuje do</h4>
+        <ul class="tagi" id="t-pasuje"></ul>
+      </section>
     </div>
   </dialog>
 
@@ -177,6 +199,7 @@
   </dialog>
 
   <script src="dane.js"></script>
+  <script src="ikony.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

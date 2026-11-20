@@ -91,7 +91,7 @@ button { font: inherit; color: inherit; }
 }
 .hero__nad { font-size: .95rem; letter-spacing: .02em; opacity: .8; margin-bottom: 8px; animation: wjazd 1s .5s both; }
 .hero__tytul {
-  font-size: clamp(5.2rem, 19vw, 19rem); line-height: .8; letter-spacing: -.035em;
+  font-size: clamp(5.2rem, 15vw, 15rem); line-height: .8; letter-spacing: -.035em;
   margin-left: -.04em; animation: wjazd 1.2s .3s cubic-bezier(.2, .7, .2, 1) both;
 }
 .hero__dol { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px 48px; margin-top: clamp(20px, 3vw, 36px); animation: wjazd 1s .7s both; }
@@ -235,7 +235,52 @@ dialog::backdrop { background: rgba(13, 10, 8, .7); backdrop-filter: blur(6px); 
 .uwagi { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .uwagi li { padding: 8px 14px; border-radius: 999px; background: var(--kosc-2); font-size: .88rem; }
 .uwagi li::before { content: "◆ "; color: var(--miedz); font-size: .7em; }
-.warianty { display: flex; gap: 10px; margin-top: 28px; }
+.warianty { display: flex; gap: 10px; margin-top: 24px; max-width: 460px; }
+
+/* karta trunku — sekcje */
+.okno-trunek { height: min(920px, calc(100dvh - 32px)); }
+.okno-trunek__foto { position: relative; overflow: hidden; }
+.okno-trunek__foto img { position: absolute; inset: 0; }
+.blok { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--linia); }
+.blok h4 { margin: 0 0 16px; font: 400 1.55rem/1 var(--serif); }
+.profil { display: grid; gap: 10px; margin: 0; max-width: 420px; }
+.profil div { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 12px; }
+.profil dt { font-size: .92rem; color: var(--dym); }
+.profil dd { margin: 0; }
+.skala { display: flex; gap: 6px; }
+.skala i { width: 100%; max-width: 40px; height: 8px; border-radius: 4px; background: var(--kosc-2); }
+.skala i.pelna { background: var(--miedz); }
+.sklad { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.sklad li { display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: center; }
+.sklad__ik { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--kosc-2); color: var(--miedz); }
+.sklad strong { display: block; font-weight: 600; font-size: .98rem; }
+.sklad small { display: block; color: var(--dym); font-size: .9rem; margin-top: 2px; }
+.os { list-style: none; margin: 0; padding: 0; counter-reset: os; display: grid; gap: 0; }
+.os li { counter-increment: os; position: relative; padding: 0 0 18px 40px; font-size: .97rem; }
+.os li::before { content: counter(os); position: absolute; left: 0; top: -1px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--atrament); font: 400 .9rem/1 var(--serif); background: var(--kosc); z-index: 1; }
+.os li:not(:last-child)::after { content: ""; position: absolute; left: 13px; top: 26px; bottom: 0; width: 1px; background: var(--linia); }
+.os li:last-child { padding-bottom: 0; }
+.temp { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 8px 14px 8px 10px; border-radius: 999px; background: var(--kosc-2); font-size: .92rem; }
+.temp .ikona { color: var(--miedz); }
+.jak { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.jak li { display: grid; justify-items: center; gap: 8px; padding: 16px 10px 14px; border: 1px solid var(--linia); border-radius: 6px; text-align: center; font-size: .88rem; }
+.jak .ikona { color: var(--miedz); }
+.przepis { background: var(--atrament); color: var(--kosc); border: 0; border-radius: 6px; padding: 24px 26px 26px; }
+.przepis h4 { color: var(--miedz); font: 500 .85rem/1 var(--sans); margin-bottom: 10px; }
+.przepis__nazwa { font: 400 1.9rem/1.05 var(--serif); margin-bottom: 10px; }
+.przepis p:last-child { color: #CFC6B8; font-size: .97rem; max-width: 46ch; }
+.tagi { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.tagi li { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--linia); font-size: .92rem; }
+.tagi .ikona { color: var(--dym); }
+
+/* karta w siatce — link do szczegółów */
+.karta__wiecej {
+  display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 14px; padding: 10px 0;
+  border: 0; border-top: 1px dashed var(--linia); background: none; cursor: pointer;
+  font-size: .88rem; color: var(--dym); text-align: left;
+}
+.karta__wiecej:hover { color: var(--atrament); }
+.karta__ikony { display: inline-flex; gap: 6px; color: var(--miedz); }
 .zamknij {
   position: absolute; top: 16px; right: 16px; display: grid; place-items: center;
   width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--linia); background: var(--kosc); cursor: pointer;
@@ -301,8 +346,10 @@ dialog::backdrop { background: rgba(13, 10, 8, .7); backdrop-filter: blur(6px); 
   .proces__glowa, .cennik__glowa, .zamow { grid-template-columns: 1fr; }
   .proces__glowa p, .cennik__glowa p { justify-self: start; }
   .zamow .przycisk { grid-column: 1; }
-  .okno-trunek { grid-template-columns: 1fr; overflow-y: auto; }
+  .okno-trunek { grid-template-columns: 1fr; overflow-y: auto; height: auto; max-height: calc(100dvh - 24px); width: calc(100vw - 24px); }
+  .okno-trunek[open] { display: block; }
   .okno-trunek__foto { aspect-ratio: 4 / 3; min-height: 0; }
+  .profil div { grid-template-columns: 120px 1fr; }
   .okno-trunek__foto img { object-position: 50% 35%; }
   .okno-trunek__info { max-height: none; overflow: visible; }
 }
